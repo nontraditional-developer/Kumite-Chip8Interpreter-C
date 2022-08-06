@@ -1,52 +1,38 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include <string.h>
 
-// Review: https://stackoverflow.com/questions/48367022/c-iterate-through-char-array-with-a-pointer
-// to iterate thru char* correctly, hopefully 
+
+// from https://github.com/dmatlack/chip8
+// repo is a great resource for C based Chip-8
+#define MAX_GAME_SIZE (0x1000 - 0x200)
+#define MEM_SIZE 4096
+
 
 int main()
 {
-    printf("hello\n");
+    u_int8_t  memory[MEM_SIZE];
+    
     char* romFile = "Roms/1-ibm-logo.ch8";
     FILE* filePtr;
-    char* romBuffer;    
-    unsigned int fileLen;
+
+    // used in init function
+    memset(memory, 0, sizeof(u_int8_t)  * MEM_SIZE);
 
     filePtr = fopen(romFile, "rb");
-    if (!filePtr) {
-        fprintf(stderr, "Unable to open file");
-    }
-    else {
-        //Get file length
-        fseek(filePtr, 0, SEEK_END);
-        fileLen=ftell(filePtr);
-        fseek(filePtr, 0, SEEK_SET);
-    }
-
-    //Allocate memory
-	romBuffer=(char *)malloc(fileLen+1);
-	if (!romBuffer)
-	{
-		fprintf(stderr, "Memory error!");
-        fclose(filePtr);
-	}
-    else {
-        //Read file contents into buffer
-        fread(romBuffer, fileLen, 1, filePtr);
-        fclose(filePtr);
-        printf("fileLen: %d\n", fileLen);
-    }
-
-    // DO WHATEVER W/ BUFFER
-    for (int i = 0; i < fileLen; i++) {
-        printf("i: %d, hex: %x\n", i, romBuffer[i]);
-    }
-
-    // free allocated memory
-    free(romBuffer);
-
-
     
+    if (NULL == filePtr) {
+        fprintf(stderr, "Unable to open game: %s\n", romFile);
+        exit(42);
+    }
+
+    fread(&memory[0x200], 1, MAX_GAME_SIZE, filePtr);
+
+    for (int i = 512; i < (512 + 132); i++) {
+        printf("i: %d, hex: %02x\n", i, memory[i]);
+    }
+
+    fclose(filePtr);    
     
 
     return 0;
