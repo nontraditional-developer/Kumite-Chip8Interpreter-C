@@ -1,0 +1,8 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/johnthedev/Projects/Kumite-Chip8Interpreter-C'
+gcc -c -o chip8.o chip8.c -I.
+gcc -c -o init.o init.c -I.
+gcc -c -o loadRom.o loadRom.c -I.
+gcc -o chip8 chip8.o init.o loadRom.o -I.
+make: Leaving directory '/home/johnthedev/Projects/Kumite-Chip8Interpreter-C'
+ 
