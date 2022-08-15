@@ -5,6 +5,7 @@
 
 #include "chip8.h"
 #include "loadRom.h"
+#include "init.h"
 
 
 // from https://github.com/dmatlack/chip8
